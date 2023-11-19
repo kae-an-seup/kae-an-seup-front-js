@@ -1,0 +1,124 @@
+.container {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 5%;
+  font-family: Arial, sans-serif;
+  height: 100vh; /* 화면 높이 전체를 사용 */
+  padding: 20px; /* 컨테이너 내부에 좀 더 공간을 추가 */
+}
+
+h1 {
+  font-size: 50px;
+  margin-bottom: 40px;
+  font-weight: bold;
+}
+.info {
+  font-weight: bold;
+  font-size: 20px;
+
+}
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+.EyesComponent {
+  height: 25%;
+  width: 25%;
+  position: absolute;  /* 절대 위치를 지정 */
+  right: 10%;            /* 오른쪽에서 0px 거리에 위치 */
+  top: 25%;            /* 상단에서 50% 거리에 위치 (상단 중앙) */
+  transform: translateY(-50%); /* Y축을 기준으로 -50%만큼 이동하여 세로로 정중앙에 오도록 함 */
+}
+
+.cards {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 70px;
+}
+
+.card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 25%;
+  height: 200px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-switch {
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 20px;
+  position: relative;
+}
+
+.toggle-switch::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  transition: all 0.3s;
+}
+.checkmark {
+  color: #2EC7F8;
+  margin-right: 10px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.checkmark-badge {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.checkmark-icon {
+  width: 20px;
+  height: 20px;
+  background-color: #2EC7F8; 
+  border-radius: 20%; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px; 
+}
+
+.checkmark-icon::before {
+  content: "✔";
+  color: #FFFFFF; 
+  font-size: 20px; 
+}
+.camera {
+  position: relative; /* 자식 요소의 절대 위치 기준점이 되도록 설정 */
+  width: 480px;
+  height: 480px;
+  background-color: black;
+  margin: 50px auto;
+  color: white;
+}
+.toggle-switch.active::after {
+  /* 켜진 상태일 때 스위치 핸들을 오른쪽으로 이동 */
+  left: 20px;
+
+}
+
+.toggle-switch.active {
+  background-color: #2EC7F8; /* 활성화 시 파란색 배경 */
+}

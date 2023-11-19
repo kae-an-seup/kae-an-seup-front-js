@@ -1,0 +1,307 @@
+setInterval(detectBlink, 5000);
+      setInterval(threeMCheck, 1800000);
+      class FPS {
+        constructor() {
+            this.startTime = 0;
+            this.frameCount = 0;
+        }
+        tick() {
+            const currentTime = performance.now();
+            if (!this.startTime) {
+            this.startTime = currentTime;
+            }
+
+            if (currentTime - this.startTime >= 1000) {
+            const fps = this.frameCount;
+            // console.log(`FPS: ${fps}`);
+            this.startTime = currentTime;
+            this.frameCount = 0;
+            }
+
+            this.frameCount++;
+        }
+      }
+
+      let blinkCounter= 0;
+      let counter = 0;
+      let re = false;
+      let c = 0;
+      let check = false; 
+      let check30M = 0
+      const video2 = document.getElementsByClassName('input_video2')[0];
+      const out2 = document.getElementsByClassName('output2')[0];
+      const controlsElement2 = document.getElementsByClassName('control2')[0];
+      const canvasCtx = out2.getContext('2d');
+      let countBox = document.getElementById('count-box');
+      let gazeBox = document.getElementById('gaze-box');
+      const fpsControl = new FPS();
+      const spinner = document.querySelector('.loading');
+
+
+      spinner.ontransitionend = () => {
+      spinner.style.display = 'none';
+      };
+
+      function onResultsFaceMesh(results) {
+        document.body.classList.add('loaded');
+        fpsControl.tick();
+
+        canvasCtx.save();
+        canvasCtx.clearRect(0, 0, out2.width, out2.height);
+        canvasCtx.drawImage(results.image, 0, 0, out2.width, out2.height);
+
+        const imageData = canvasCtx.getImageData(0, 0, out2.width, out2.height);
+        let gray = convertToGrayScale(imageData);
+
+
+        if (results.multiFaceLandmarks) {
+            for (const landmarks of results.multiFaceLandmarks) {
+                if (
+                    landmarks[FACEMESH_RIGHT_EYE[0][0]] && landmarks[FACEMESH_RIGHT_EYE[3][0]] &&
+                    landmarks[FACEMESH_LEFT_EYE[0][0]] && landmarks[FACEMESH_LEFT_EYE[3][0]]) {
+                    drawConnectors(
+                        canvasCtx, landmarks, [FACEMESH_RIGHT_EYE[0], FACEMESH_RIGHT_EYE[3], FACEMESH_RIGHT_EYE[6], FACEMESH_RIGHT_EYE[12]],
+                        { color: '#FF3030' });
+                    drawConnectors(
+                        canvasCtx, landmarks, [FACEMESH_LEFT_EYE[0], FACEMESH_LEFT_EYE[3], FACEMESH_LEFT_EYE[6], FACEMESH_LEFT_EYE[12]],
+                        { color: '#30FF30' });
+
+                    let gaze_left_eye_ratio = getGazeRatio([FACEMESH_LEFT_EYE[0], FACEMESH_LEFT_EYE[2], FACEMESH_LEFT_EYE[4], FACEMESH_LEFT_EYE[6],FACEMESH_LEFT_EYE[11], FACEMESH_LEFT_EYE[13]], landmarks, gray);
+                    let gaze_right_eye_ratio = getGazeRatio([FACEMESH_RIGHT_EYE[0], FACEMESH_RIGHT_EYE[2], FACEMESH_RIGHT_EYE[4], FACEMESH_RIGHT_EYE[6],FACEMESH_RIGHT_EYE[11], FACEMESH_RIGHT_EYE[13]], landmarks, gray);
+                    let gaze_ratio = (gaze_right_eye_ratio + gaze_left_eye_ratio) / 2
+                    // console.log(gaze_ratio);
+
+                    // console.log(gaze_ratio)
+                    if(gaze_ratio < 0.946) {
+                        gazeBox.value = "left";
+                    }
+                    else if(gaze_ratio > 0.946 && gaze_ratio < 0.955) {
+                        gazeBox.value = "right";
+                    }
+                    // else if(0.955 < gaze_ratio) {
+                    //     gazeBox.value = "center";
+                    // } 
+                    else if(0.955 < gaze_ratio < 0.988) {
+                        gazeBox.value = "center";
+                    } 
+
+                    const left_eye_ratio = getBlinkingRatio(FACEMESH_LEFT_EYE, landmarks);
+                    const right_eye_ratio = getBlinkingRatio(FACEMESH_RIGHT_EYE, landmarks);
+                    const blinking_ratio = (left_eye_ratio + right_eye_ratio) / 2;
+
+                    if (blinking_ratio > 2.55) {
+                        // console.log("눈 감은 상태 혹은 깜박임");
+                        re = true; 
+                        console.log("눈 깜박임 횟수"+c);
+                        countBox.value = c
+                        console.log("blinking : " + blinking_ratio);
+                    } else {
+                        if (re == true) {
+                        c += 1;
+                        check = true
+                        // console.log("눈 깜박임 횟수: "+c);
+                        re = false;
+                        }
+                        // console.log("안깜박임");
+                        // console.log(blinking_ratio);
+                    }
+            }
+        }
+        canvasCtx.restore();
+        }
+    }
+
+
+    function convertToGrayScale(imageData) {
+        const pixels = imageData.data;
+        const canvas = document.createElement('canvas');
+        canvas.width = imageData.width;
+        canvas.height = imageData.height;
+        const ctx = canvas.getContext('2d');
+        ctx.putImageData(imageData, 0, 0);
+        
+        for (let i = 0; i < pixels.length; i += 4) {
+            const avg = (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
+            pixels[i] = avg;
+            pixels[i + 1] = avg;
+            pixels[i + 2] = avg;
+        }
+
+        const grayImage = new Image();
+        grayImage.src = canvas.toDataURL();
+
+        return grayImage;
+    }
+
+        function getGazeRatio(eye_points, facial_landarks, gray){
+            let eye_region = [{ x: facial_landarks[eye_points[0][0]].x, y: facial_landarks[eye_points[0][0]].y},
+                                { x: facial_landarks[eye_points[1][0]].x, y: facial_landarks[eye_points[1][0]].y},
+                                { x: facial_landarks[eye_points[2][0]].x, y: facial_landarks[eye_points[2][0]].y},
+                                { x: facial_landarks[eye_points[3][0]].x, y: facial_landarks[eye_points[3][0]].y},
+                                { x: facial_landarks[eye_points[4][0]].x, y: facial_landarks[eye_points[4][0]].y},
+                                { x: facial_landarks[eye_points[5][0]].x, y: facial_landarks[eye_points[5][0]].y}];
+
+
+            let canvas = document.createElement('canvas');
+            canvas.width = out2.width;
+            canvas.height = out2.height;
+            let ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(eye_region[0].x, eye_region[0].y);
+            for (let i = 1; i<eye_region.length; i++) {
+                ctx.lineTo(eye_region[i].x, eye_region[i].y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = 'white';
+            ctx.fill();
+
+            ctx.globalCompositeOperation = 'source-in';
+            ctx.drawImage(gray, 0, 0);
+
+            let eyeImageData = ctx.getImageData(0, 0, out2.width, out2.height);
+            let eyeData = eyeImageData.data;
+
+            let min_x = out2.width;
+            let max_x = 0;
+            let min_y = out2.height;
+            let max_y = 0;
+
+            for (let i = 0; i < eye_region.length; i++) {
+                let x = eye_region[i].x;
+                let y = eye_region[i].y;
+                if (x < min_x) min_x = x;
+                if (x > max_x) max_x = x;
+                if (y < min_y) min_y = y;
+                if (y > max_y) max_y = y;
+            }
+
+            let grayEyeData = new Uint8Array(4 * (max_x*100 - min_x*100) * (max_y*100 - min_y*100));
+            let width = max_x - min_x;
+            for (let i = 0, j = 0; i < eyeData.length; i += 4) {
+                let x = (i / 4) % width;
+                let y = Math.floor((i / 4) / width);
+                if (x >= min_x && x < max_x && y >= min_y && y < max_y) {
+                    let index = (x - min_x) + (y - min_y) * width;
+                    grayEyeData[j++] = eyeData[i];
+                }
+            }
+
+            let thresholdEye = new Uint8Array(grayEyeData.length);
+            let thresholdValue = 70;
+            for (let i = 0; i < grayEyeData.length; i++) {
+                thresholdEye[i] = grayEyeData[i] < thresholdValue ? 255 : 0;
+            }
+
+            let halfWidth = Math.floor(width / 2);
+            let leftSideThreshold = thresholdEye.slice(0, grayEyeData.length / 2);
+            let rightSideThreshold = thresholdEye.slice(grayEyeData.length / 2);
+
+            let leftSideWhite = 0;
+            for (let i = 0; i < leftSideThreshold.length; i++) {
+                leftSideWhite += leftSideThreshold[i] === 255 ? 1 : 0;
+            }
+
+            let rightSideWhite = 0;
+            for (let i = 0; i < rightSideThreshold.length; i++) {
+                rightSideWhite += rightSideThreshold[i] === 255 ? 1 : 0;
+            }
+
+            let gazeRatio;
+
+            if (leftSideWhite == 0) {
+                gazeRatio = 0.95;
+            } else if (rightSideWhite == 0) {
+                gazeRatio = 0.94;
+            } else {
+                gazeRatio = leftSideWhite / rightSideWhite;
+            }
+
+            return gazeRatio;
+        }
+
+        function getBlinkingRatio(FACEMESH, landmarks){
+          const left_point = [landmarks[FACEMESH[0][0]].x,  landmarks[FACEMESH[0][0]].y]
+          const right_point = [landmarks[FACEMESH[6][0]].x,  landmarks[FACEMESH[6][0]].y]
+          const center_top = [landmarks[FACEMESH[3][0]].x,  landmarks[FACEMESH[3][0]].y]
+          const center_bottom = [landmarks[FACEMESH[12][0]].x,  landmarks[FACEMESH[12][0]].y]
+
+          const hor_line_length =  Math.hypot((left_point[0] - right_point[0]), (left_point[1] - right_point[1]));
+          const ver_line_length =  Math.hypot((center_top[0] - center_bottom[0]), (center_top[1] - center_bottom[1]))
+
+          return ratio = hor_line_length / (ver_line_length)
+
+        }
+
+        function detectBlink() {
+          if (!check) {
+            console.log("사용자가 5초 동안 눈을 깜박이지 않았습니다.");
+            // alert("사용자가 5초 동안 눈을 깜박이지 않았습니다.")
+            // alert("눈이 너무 건조합니다. 눈을 자주 깜박여주세요! 혹은 아이고를 실행해 눈을 풀어주세요!")
+            // alert("잘하고 계십니다! 계속해서 눈을 자주 깜박여주세요")
+            check30M +=1
+          }
+          check = false;
+        }
+
+        function threeMCheck() {
+          if (check30M <= 324) {
+            console.log("눈이 너무 건조합니다. 눈을 자주 깜박여주세요! 혹은 아이고를 실행해 눈을 풀어주세요!")
+            alert("눈이 너무 건조합니다. 눈을 자주 깜박여주세요! 혹은 아이고를 실행해 눈을 풀어주세요!")
+            check30M = 0
+          } else {
+            console.log("잘하고 계십니다! 계속해서 눈을 자주 깜박여주세요")
+            alert("잘하고 계십니다! 계속해서 눈을 자주 깜박여주세요")
+            check30M = 0
+          }
+        }
+
+        
+        const faceMesh = new FaceMesh({locateFile: (file) => {
+          return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.1/${file}`;
+        }});
+        faceMesh.onResults(onResultsFaceMesh);
+
+        const camera = new Camera(video2, {
+          onFrame: async () => {
+              await faceMesh.send({image: video2});
+          },
+          width: 480,
+          height:480
+        });
+        camera.start();
+
+        new ControlPanel(controlsElement2, {
+            selfieMode: true,
+            maxNumFaces: 1,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+          })
+          .add([
+            new StaticText({title: 'MediaPipe Face Mesh'}),
+            fpsControl,
+            new Toggle({title: 'Selfie Mode', field: 'selfieMode'}),
+            new Slider({
+                title: 'Max Number of Faces',
+                field: 'maxNumFaces',
+                range: [1, 4],
+                step: 1
+            }),
+            new Slider({
+                title: 'Min Detection Confidence',
+                field: 'minDetectionConfidence',
+                range: [0, 1],
+                step: 0.01
+            }),
+            new Slider({
+                title: 'Min Tracking Confidence',
+                field: 'minTrackingConfidence',
+                range: [0, 1],
+                step: 0.01
+            }),
+          ])
+          .on(options => {
+            video2.classList.toggle('selfie', options.selfieMode);
+            faceMesh.setOptions(options);
+          });
