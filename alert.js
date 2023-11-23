@@ -1,3 +1,5 @@
+const audio = new Audio('./assets/alarm.mp3');
+
 document.addEventListener('DOMContentLoaded', () => {
 
     if (Notification.permission === 'default') {
@@ -37,17 +39,21 @@ function showOneStep() {
         body: "눈을 깜빡일 시간이에요!",
         icon: "assets/cry1.png"
     })
-}function showTwoStep() {
+    audio.play();
+}
+function showTwoStep() {
     new Notification("캐-안습", {
         body: "눈이 불편하지 않나요?",
         icon: "assets/cry2.png"
     })
+    audio.play();
 }
 function showThreeStep() {
     new Notification("캐-안습", {
         body: "안구건조증이 심해요!",
         icon: "assets/cry3.png"
     })
+    audio.play();
 }
 
 // function showOneHour() {
@@ -62,6 +68,7 @@ function showNotification() {
         body: "안구건조증을 방지하기 위한 서비스가 시작됩니다.",
         icon: "assets/eyeDrop.png" // 알림에 표시될 아이콘 경로
     });
+    audio.play();
 }
 
 function showOneHour() {
@@ -84,4 +91,5 @@ function showOneHour() {
             window.location.href = 'anime.html'; // 페이지 URL 변경 가능
         };
     }
+    audio.play();
 }
