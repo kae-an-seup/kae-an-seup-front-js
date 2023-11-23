@@ -18,11 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const animeButton = document.querySelector('#animation_toggle');
     animeButton.addEventListener('click', () => {
-        animeButton.classList.toggle('active');
-        animation_toggle = true;
-        console.log(animation_toggle, "애니메이션 토글2");
-        showOneHour(); // 3600000 밀리초 = 1시간  
+        const isActivated = animeButton.classList.toggle('active');
+        animation_toggle = isActivated;
+        // console.log(animation_toggle, "애니메이션 토글 변경된 상태");
 
+        if (animation_toggle) {
+            showOneHour(); // 3600000 밀리초 = 1시간  
+            // console.log(animation_toggle, "애니메이션 토글 켜짐");
+        } else {
+            // console.log(animation_toggle, "애니메이션 토글 꺼짐");
+        }
     });
     // setInterval(showOneHour, 3600000); // 3600000 밀리초 = 1시간
 });
