@@ -17,41 +17,34 @@ const upDown = anime({
 const leftRight = anime({
     targets: '.circle',
     translateX: [
-        { value: '-50vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '50vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '-50vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '50vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '-50vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '50vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '-50vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '0', duration: 800, easing: 'easeInOutSine' },
+        { value: '-50vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '50vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '-50vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '50vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '-50vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '0', duration: 1200, easing: 'easeInOutSine' },
     ],
-    autoplay: false,
 });
 
 const diagonal = anime({
     targets: '.circle',
     translateY: [
-        { value: '-70vh', duration: 800, easing: 'easeInOutSine' },
-        { value: '70vh', duration: 800, easing: 'easeInOutSine' },
-        { value: '-70vh', duration: 800, easing: 'easeInOutSine' },
-        { value: '70vh', duration: 800, easing: 'easeInOutSine' },
-        { value: '-70vh', duration: 800, easing: 'easeInOutSine' },
-        { value: '70vh', duration: 800, easing: 'easeInOutSine' },
-        { value: '-70vh', duration: 800, easing: 'easeInOutSine' },
-        { value: '70vh', duration: 800, easing: 'easeInOutSine' },
-        { value: '0', duration: 800, easing: 'easeInOutSine' },
+        { value: '-70vh', duration: 1200, easing: 'easeInOutSine' },
+        { value: '70vh', duration: 1200, easing: 'easeInOutSine' },
+        { value: '-70vh', duration: 1200, easing: 'easeInOutSine' },
+        { value: '70vh', duration: 1200, easing: 'easeInOutSine' },
+        { value: '-70vh', duration: 1200, easing: 'easeInOutSine' },
+        { value: '70vh', duration: 1200, easing: 'easeInOutSine' },
+        { value: '0', duration: 1200, easing: 'easeInOutSine' },
       ],
       translateX: [
-        { value: '-70vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '70vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '-70vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '70vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '-70vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '70vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '-70vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '70vw', duration: 800, easing: 'easeInOutSine' },
-        { value: '0', duration: 800, easing: 'easeInOutSine' }
+        { value: '-70vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '70vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '-70vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '70vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '-70vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '70vw', duration: 1200, easing: 'easeInOutSine' },
+        { value: '0', duration: 1200, easing: 'easeInOutSine' }
       ],
       autoplay: false,
 });
@@ -89,9 +82,9 @@ const diagonal2 = anime({
 //     });
 //   });
 
-  leftRight.finished.then(() => {
-    diagonal.restart();
-    diagonal.finished.then(() => {
-      diagonal2.restart();
-    })
+leftRight.finished.then(() => {
+  diagonal.restart();
+  diagonal.finished.then(() => {
+    diagonal2.restart();
   })
+})
