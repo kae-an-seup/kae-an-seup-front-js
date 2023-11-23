@@ -13,38 +13,44 @@ document.addEventListener('DOMContentLoaded', () => {
         showNotification();
     
     }
+    let animation_toggle = false;
+    console.log(animation_toggle, "애니메이션 토글1");
+
     const animeButton = document.querySelector('#animation_toggle');
     animeButton.addEventListener('click', () => {
         animeButton.classList.toggle('active');
-        showOneHour(); // 3600000 밀리초 = 1시간    
+        animation_toggle = true;
+        console.log(animation_toggle, "애니메이션 토글2");
+        showOneHour(); // 3600000 밀리초 = 1시간  
+
     });
     // setInterval(showOneHour, 3600000); // 3600000 밀리초 = 1시간
 });
 
 function showOneStep() {
     new Notification("캐-안습", {
-        body: "내용",
+        body: "눈을 깜빡일 시간이에요!",
         icon: "assets/cry1.png"
     })
 }function showTwoStep() {
     new Notification("캐-안습", {
-        body: "내용",
+        body: "눈이 불편하지 않나요?",
         icon: "assets/cry2.png"
     })
 }
 function showThreeStep() {
     new Notification("캐-안습", {
-        body: "내용",
+        body: "안구건조증이 심해요!",
         icon: "assets/cry3.png"
     })
 }
 
-function showOneHour() {
-    new Notification("캐-안습", {
-        body: "내용",
-        icon: "assets/eyeDrop.png"
-    })
-}
+// function showOneHour() {
+//     new Notification("캐-안습", {
+//         body: "내용",
+//         icon: "assets/eyeDrop.png"
+//     })
+// }
 
 function showNotification() {
     const notification = new Notification("캐-안습", {
