@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>캐-안습</title>
     <style>
-        /* 여기에 CSS 내용을 붙여넣으세요 */
     </style>
     <link href="home.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
@@ -58,40 +57,36 @@
         <!-- <p>Meduapipe Face Mesh</p>
         <p>count : 40</p>
         <div class='camera'></div> -->
-        <div class="container" style="margin-top: 20px;">
-            <div class="columns">
+        <body class="container" style="margin-top: 20px;">
+          <div class="columns">
               <div class="column" style="display: none;">
-                <article class="panel is-info">
-                  <p class="panel-heading">
-                    Webcam Input
-                  </p>
-                  <div class="panel-block">
-                    <video class="input_video2"></video>
-                  </div>
-                </article>
+                  <article class="panel is-info">
+                      <p class="panel-heading">Webcam Input</p>
+                      <div class="panel-block">
+                          <video class="input_video2"></video>
+                      </div>
+                  </article>
               </div>
               <div class="column">
-                <article class="panel is-info">
-                  <p class="panel-heading">
-                    Mediapipe Face Mesh
-                    <p>count: <input id="count-box" value="0" style="border: none;"></p>
-                    <p style="display: none;">gaze: <input id="gaze-box" value="0" style="border: none;"></p>
-                  </p>
-                  <div class="panel-block" style="display: flex; justify-content: center;">
-                    <canvas st  class="output2" width="480px" height="480px"></canvas>
-                  </div>
-                </article>
+                  <article class="panel is-info">
+                      <p class="panel-heading">   Mediapipe Face Mesh
+                          <p>count: <input id="count-box" value="0" style="border: none;"></p>
+                          <p>gaze: <input id="gaze-box" value="0" style="border: none; font-size: 30px;"></p>
+                      </p>
+                      <div class="panel-block" style="display: flex; justify-content: center;">
+                          <!-- 이거 동영상이야 -->
+                          <canvas st  class="output2" width="480px" height="480px"></canvas>
+                          <!-- 여기까지 동여상이야 -->
+                      </div>
+                  </article>
               </div>
-            </div>
-            <div class="loading">
-              <div class="spinner"></div>
-            </div>
-          <div style="visibility: hidden;" class="control2">
           </div>
+          <div class="loading">
+              <div class="spinner"></div>
+          </div>
+          <div style="visibility: hidden;" class="control2"></div>
+  
     
-        </div>
-    </div>
-
     <script src="./home.js"></script>
     <script src="./detectionModel_ver2.js"></script>
     <script src="./alert.js"></script>
