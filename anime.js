@@ -1,3 +1,17 @@
+document.addEventListener('DOMContentLoaded', () => {
+
+  if (Notification.permission === 'default') {
+      Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+              // 권한이 허용된 경우 알림 표시
+              startAnime();
+          }
+      });
+  } else if (Notification.permission === 'granted') {
+      // 이미 권한이 허용되어 있을 경우 알림 바로 표시
+      startAnime();
+  }
+});
 
 // const startButton = document.getElementById('startAnimationButton');
 const circle = document.querySelector('.circle');
@@ -12,6 +26,7 @@ const upDown = anime({
       { value: '-50vh', duration: 800, easing: 'easeInOutSine' },
       { value: '0vh', duration: 800, easing: 'easeInOutSine' },
     ],
+    autoplay: false,
   });
 
 const leftRight = anime({
@@ -24,6 +39,7 @@ const leftRight = anime({
         { value: '-50vw', duration: 1200, easing: 'easeInOutSine' },
         { value: '0', duration: 1200, easing: 'easeInOutSine' },
     ],
+    autoplay: false,
 });
 
 const diagonal = anime({
@@ -82,9 +98,12 @@ const diagonal2 = anime({
 //     });
 //   });
 
-leftRight.finished.then(() => {
-  diagonal.restart();
-  diagonal.finished.then(() => {
-    diagonal2.restart();
+function startAnime() {
+  leftRight.restart();
+  leftRight.finished.then(() => {
+    diagonal.restart();
+    diagonal.finished.then(() => {
+      diagonal2.restart();
+    })
   })
-})
+}
