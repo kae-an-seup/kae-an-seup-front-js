@@ -41,7 +41,7 @@ setInterval(check1h, 30000);
  let c = 0;
  let check = false;
  let check30M = 0;
- let movingAvg_tmp = 5;
+ let movingAvg_tmp = 2500;
  let movingAvg = 0;
 
  let eyeImg = document.getElementById('eyeImg');
@@ -127,7 +127,7 @@ setInterval(check1h, 30000);
                  const right_gaze_ratio = get_gaze_ratio(rightEyeImgData);
 
                  var gazeRatio = (left_gaze_ratio + right_gaze_ratio) / 2;
-                 console.log(gazeRatio)
+                //  console.log(gazeRatio)
                  if (gazeRatio < 0.8) {
                      gazeBox.value = "left";
                  } else if (gazeRatio > 1.8 ) {
@@ -142,6 +142,8 @@ setInterval(check1h, 30000);
                  const blinkingRatio = (left_blinking_ratio + right_blinking_ratio) / 2;
 
                  if (left_blinking_ratio < 0.18 && right_blinking_ratio<0.18) {
+                    // console.log(left_blinking_ratio)
+                    // console.log(right_blinking_ratio)
                      re = true;
                      countBox.value = c;
                  } else {
@@ -152,22 +154,41 @@ setInterval(check1h, 30000);
                          movingAvg = (movingAvg_tmp + movingAvg) / 2;
                          movingAvg_tmp = movingAvg;
 
-                         if (movingAvg > 3000) {
-                             if (movingAvg < 4000) {
-                                 console.log("경고 1단계");
-                                 eyeImg.src = "assets/cry1.png";
-                             } else if (movingAvg < 5000) {
-                                 console.log("경고 2단계");
-                                 eyeImg.src = "assets/cry2.png";
-                             } else if (movingAvg < 6000) {
-                                 console.log("경고 3단계");
-                                 eyeImg.src = "assets/cry3.png";
-                                 showThreeStep();
-                             }
-                         } else {
-                            eyeImg.src = "assets/eyeDrop.png";
-                             console.log("0단계");
-                         }
+                        //  if (movingAvg > 3000) {
+                        //      if (movingAvg < 4000) {
+                        //          console.log("경고 1단계");
+                        //          eyeImg.src = "assets/cry1.png";
+                        //      } else if (movingAvg < 5000) {
+                        //          console.log("경고 2단계");
+                        //          eyeImg.src = "assets/cry2.png";
+                        //      } else if (movingAvg < 6000) {
+                        //          console.log("경고 3단계");
+                        //          eyeImg.src = "assets/cry3.png";
+                        //          showThreeStep();
+                        //      }
+                        //  } else {
+                        //     eyeImg.src = "assets/eyeDrop.png";
+                        //      console.log("0단계");
+                        //  }
+
+                         if (movingAvg > 2700) {
+                            if (movingAvg < 2800) {
+                                console.log("경고 1단계");
+                                eyeImg.src = "assets/cry1.png";
+                                // showOneStep();
+                            } else if (movingAvg < 3000) {
+                                console.log("경고 2단계");
+                                eyeImg.src = "assets/cry2.png";
+                                showTwoStep();
+                            } else if (movingAvg < 3500) {
+                                console.log("경고 3단계");
+                                eyeImg.src = "assets/cry3.png";
+                                showThreeStep();
+                            }
+                        } else {
+                           eyeImg.src = "assets/eyeDrop.png";
+                            console.log("0단계");
+                        }
 
                          check = true;
                          re = false;

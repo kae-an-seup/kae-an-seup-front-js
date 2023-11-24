@@ -94,5 +94,7 @@ function showOneHour() {
     audio.play();
 }
 
+window.showOneStep = showOneStep;
+window.showTwoStep = showTwoStep;
 window.showThreeStep = showThreeStep;
 window.showOneHour = showOneHour;
