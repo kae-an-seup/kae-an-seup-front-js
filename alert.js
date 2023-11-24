@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // console.log(animation_toggle, "애니메이션 토글 변경된 상태");
 
         if (animation_toggle) {
-            showOneHour(); // 3600000 밀리초 = 1시간  
+            // showOneHour(); // 3600000 밀리초 = 1시간  
             // console.log(animation_toggle, "애니메이션 토글 켜짐");
         } else {
             // console.log(animation_toggle, "애니메이션 토글 꺼짐");
@@ -93,3 +93,6 @@ function showOneHour() {
     }
     audio.play();
 }
+
+window.showThreeStep = showThreeStep;
+window.showOneHour = showOneHour;
