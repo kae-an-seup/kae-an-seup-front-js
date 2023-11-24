@@ -1,5 +1,6 @@
  // 1시간 단위 알림 보내는 함수 호출
- setInterval(check1h, 3600000);
+//  setInterval(check1h, 3600000);
+setInterval(check1h, 30000);
  // no touch
  class FPS {
      constructor() {
@@ -43,7 +44,7 @@
  let movingAvg_tmp = 5;
  let movingAvg = 0;
 
- 
+ let eyeImg = document.getElementById('eyeImg');
 
  //1 onResultsFaceMesh
  function onResultsFaceMesh(results){
@@ -154,12 +155,17 @@
                          if (movingAvg > 3000) {
                              if (movingAvg < 4000) {
                                  console.log("경고 1단계");
+                                 eyeImg.src = "assets/cry1.png";
                              } else if (movingAvg < 5000) {
                                  console.log("경고 2단계");
+                                 eyeImg.src = "assets/cry2.png";
                              } else if (movingAvg < 6000) {
                                  console.log("경고 3단계");
+                                 eyeImg.src = "assets/cry3.png";
+                                 showThreeStep();
                              }
                          } else {
+                            eyeImg.src = "assets/eyeDrop.png";
                              console.log("0단계");
                          }
 
@@ -348,7 +354,8 @@
 
  function check1h() {
      // 여기서 1시간 지났다는 알림 호출
-     console.log("1시간 지남");
+     showOneHour();
+    //  console.log("1시간 지남");
  }
  
 
